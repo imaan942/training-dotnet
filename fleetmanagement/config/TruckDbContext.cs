@@ -10,11 +10,12 @@ public class TruckDbContext : DbContext{
 
     //collection of entities
     public DbSet<Truck> Trucks {get; set;} //ORM
-    // public DbSet<Driver> Drivers {get; set;} //ORM
+    public DbSet<Driver> Drivers {get; set;} //ORM
 
     //method to configure shape of entities
     protected override void OnModelCreating(ModelBuilder modelBuilder){
         modelBuilder.Entity<Truck>().HasKey(t => t.Id);
+        modelBuilder.Entity<Driver>().HasKey(d => d.Id);
         // modelBuilder.Entity<Driver>().HasKey(d => d.Id);
         base.OnModelCreating(modelBuilder);
     }

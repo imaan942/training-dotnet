@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: fms
+      MYSQL_USER: fleetuser
+      MYSQL_PASSWORD: fleetpassword
+    ports:
+      - "3306:3306"
+    networks:
+      - "dotnet-fleet-network"
+  app:
+    build: .
+    container_name: fleetmanagement-container
+    restart: always
+    depends_on:
+      - mysql  #  Ensures MySQL starts first
+    environment:
+      ConnectionStrings__DefaultConnection: "Server=mysql;Database=fms;User=fleetuser;Password=fleetpassword;"
+    ports:
+      - "5265:5265"
+    networks:
+      - "dotnet-fleet-network"
+networks:
+  dotnet-fleet-network:

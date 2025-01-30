@@ -8,7 +8,7 @@ public class DriverRepository : IDriverRepository
 {
     private readonly DbContext _context;
 
-    public DriverRepository(DriverDbContext context)
+    public DriverRepository(TruckDbContext context)
     {
         _context = context;
     }
