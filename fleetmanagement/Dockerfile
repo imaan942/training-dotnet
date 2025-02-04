@@ -16,6 +16,13 @@ WORKDIR /app
 # Copy the published application from the build stage
 COPY --from=build /out .
 
+#set env vars
+ENV DB_HOST = mysql
+ENV DB_PORT = 3306
+ENV DB_NAME = fms
+ENV DB_USER = fleetuser
+ENV DB_PASSWORD = fleetpassword
+
 # Expose the correct port #Make sure it matches your application port
 EXPOSE 5265
 
