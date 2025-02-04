@@ -15,7 +15,7 @@ pipeline{
             steps{
                 git (
                     url: 'https://github.com/imaan942/training-dotnet.git',
-                    credentials: 'git-credentials',
+                    credentialsId: 'git-credentials',
                     branch: 'main'
                 )
             }
