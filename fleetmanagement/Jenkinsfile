@@ -2,7 +2,7 @@ pipeline{
     agent any
 
     environment{
-        DOCKER_IMAGE = 'imaahmad/fleetmanagement-dotnet-jenkins'
+        DOCKER_IMAGE = 'imaahmad/fleetmanagement-dotnet-jenkins:latest'
         DB_HOST = ''
         DB_PORT = '3306'
         DB_NAME = 'fms'
