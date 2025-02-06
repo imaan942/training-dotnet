@@ -5,15 +5,36 @@ using fleetmanagement.repository;
 using fleetmanagement.middleware;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.UseUrls("http://0.0.0.0:5265");
+// builder.WebHost.UseUrls("http://0.0.0.0:5265");
+
+// Explicitly configure Kestrel to listen on port 5222
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.ListenAnyIP(5265);
+});
+
+// Read connection string from environment variables
+var dbHost = Environment.GetEnvironmentVariable("DB_HOST") ?? "localhost";
+var dbPort = Environment.GetEnvironmentVariable("DB_PORT") ?? "3306";
+var dbName = Environment.GetEnvironmentVariable("DB_NAME") ?? "fleetdb";
+var dbUser = Environment.GetEnvironmentVariable("DB_USER") ?? "fleetuser";
+var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "fleetpassword";
+
+// Construct the connection string
+var connectionString = $"Server={dbHost};Port={dbPort};Database={dbName};User={dbUser};Password={dbPassword};";
+
 // Read connection string from environment variable (for Docker support)
-var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection") 
-    ?? builder.Configuration.GetConnectionString("DefaultConnection");
+// var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection") 
+//     ?? builder.Configuration.GetConnectionString("DefaultConnection");
 
 //Add database context with retry logic
+// Log the connection string to verify
+Console.WriteLine($"[DEBUG] Using Connection String: {connectionString}");
+
+// Add database context with MySQL and retry logic
 builder.Services.AddDbContext<TruckDbContext>(options =>
     options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 25)),
-        mySqlOptions => mySqlOptions.EnableRetryOnFailure() // Enables retries if MySQL isn't ready
+        mySqlOptions => mySqlOptions.EnableRetryOnFailure()
     )
 );
 // builder.Services.AddDbContext<TruckDbContext>(options => 
